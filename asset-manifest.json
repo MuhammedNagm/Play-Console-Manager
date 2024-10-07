@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Play-Console-Manager/static/css/main.f855e6bc.css",
-    "main.js": "/Play-Console-Manager/static/js/main.308dbd5b.js",
+    "main.js": "/Play-Console-Manager/static/js/main.5e3675e2.js",
     "static/js/453.1958fe39.chunk.js": "/Play-Console-Manager/static/js/453.1958fe39.chunk.js",
     "index.html": "/Play-Console-Manager/index.html",
     "main.f855e6bc.css.map": "/Play-Console-Manager/static/css/main.f855e6bc.css.map",
-    "main.308dbd5b.js.map": "/Play-Console-Manager/static/js/main.308dbd5b.js.map",
+    "main.5e3675e2.js.map": "/Play-Console-Manager/static/js/main.5e3675e2.js.map",
     "453.1958fe39.chunk.js.map": "/Play-Console-Manager/static/js/453.1958fe39.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.308dbd5b.js"
+    "static/js/main.5e3675e2.js"
   ]
 }
