@@ -6,10 +6,12 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
   const handleLoginSuccess = (response) => {
     console.log("Google login success:", response);
     setIsLoggedIn(true);
+    setToken(response.credential);
   };
 
   const handleLoginFailure = (error) => {
@@ -25,7 +27,7 @@ function App() {
               <div className="card-body">
                 <h1 className="text-center mb-4">Play Console Manager</h1>
                 {isLoggedIn ? (
-                  <PlayConsoleManager />
+                  <PlayConsoleManager token="{token}" />
                 ) : (
                   <div className="text-center">
                     <p className="mb-4">Please log in to continue</p>

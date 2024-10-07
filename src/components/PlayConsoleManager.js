@@ -3,7 +3,7 @@ import { Container, Typography, Box, Paper } from "@mui/material";
 import AppList from "./AppList";
 import AppUploader from "./AppUploader";
 
-function PlayConsoleManager() {
+function PlayConsoleManager({ token }) {
   return (
     <Container maxWidth="lg">
       <Box sx={{ my: 4 }}>
@@ -18,7 +18,7 @@ function PlayConsoleManager() {
           />
         </Paper>
         <Paper elevation={3} sx={{ p: 3 }}>
-          <AppList />
+          <AppList token={token} />
         </Paper>
       </Box>
     </Container>
