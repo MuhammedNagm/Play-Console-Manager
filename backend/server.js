@@ -19,16 +19,14 @@ app.get("/api/play-console/apps", async (req, res) => {
   auth.setCredentials({ access_token: authToken });
 
   try {
-    const response = await playdeveloper.edits.list({
+    const response = await playdeveloper.applications.list({
       auth,
-      packageName: "your-package-name", // Specify the package name here
     });
-    res.json(response.data.apps);
+    res.json(response.data.applications);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch apps" });
   }
 });
-
 // Updated endpoint for uploading APK
 app.post(
   "/api/play-console/upload",
@@ -80,6 +78,35 @@ app.post(
     }
   }
 );
+
+app.post("/api/play-console/notifications", async (req, res) => {
+  const authToken = req.headers.authorization.split("Bearer ")[1];
+  const { packages } = req.body;
+
+  const auth = new google.auth.OAuth2();
+  auth.setCredentials({ access_token: authToken });
+
+  try {
+    const notifications = [];
+
+    for (const packageName of packages) {
+      const response = await playdeveloper.reviews.list({
+        auth,
+        packageName,
+        // Add other parameters as needed
+      });
+
+      notifications.push({
+        packageName,
+        data: response.data,
+      });
+    }
+
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch notifications" });
+  }
+});
 
 app.listen(4000, () => {
   console.log("Server is running on port 4000");
