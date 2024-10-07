@@ -4,6 +4,7 @@ import axios from "axios";
 
 function AppList({ token }) {
   const [apps, setApps] = useState([]);
+  const [notifications, setNotifications] = useState({});
 
   useEffect(() => {
     // Fetch apps from backend API
@@ -18,8 +19,9 @@ function AppList({ token }) {
           }
         );
         setApps(response.data);
-        // Poll every (100000 milliseconds)
-        setInterval(pollNotifications(token), 100000);
+        setInterval(() => {
+          fetchNotifications(response.data);
+        }, 60000);
       } catch (error) {
         console.error("Error fetching apps:", error);
         window.alert("Failed to fetch apps. Please try again.");
@@ -31,6 +33,25 @@ function AppList({ token }) {
     }
   }, [token]);
 
+  const fetchNotifications = async (apps) => {
+    const notificationsData = {};
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/play-console/notifications`,
+        { packages: apps.map((app) => app.packageName) },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setNotifications(response.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
   return (
     <div>
       <h2>Your Google Play Console Apps</h2>
@@ -38,36 +59,18 @@ function AppList({ token }) {
         {apps.map((app) => (
           <li key={app.packageName}>
             <strong>{app.title}</strong> - {app.packageName}
+            {notifications[app.packageName] && (
+              <ul>
+                {notifications[app.packageName].map((notification, index) => (
+                  <li key={index}>{notification.message}</li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
     </div>
   );
-}
-
-function pollNotifications(token) {
-  const packages = ["com.example.app1", "com.example.app2", "com.example.app3"];
-
-  fetch(`${process.env.REACT_APP_BACKEND_URL}/api/play-console/notifications`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ packages }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // Process and display the notifications for each package
-      data.forEach((packageData) => {
-        console.log(
-          `Notifications for ${packageData.packageName}:`,
-          packageData.data
-        );
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching notifications:", error);
-    });
 }
 
 export default AppList;
