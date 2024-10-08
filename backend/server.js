@@ -19,12 +19,13 @@ app.get("/api/play-console/apps", async (req, res) => {
   auth.setCredentials({ access_token: authToken });
 
   try {
-    const response = await playdeveloper.applications.list({
+    const response = await playdeveloper.inappproducts.list({
       auth,
+      packageName: "com.example.app",
     });
     res.json(response.data.applications);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch apps" });
+    res.status(500).json({ errorMessage: "Failed to fetch apps", error });
   }
 });
 // Updated endpoint for uploading APK
